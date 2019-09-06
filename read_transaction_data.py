@@ -154,7 +154,7 @@ if __name__== "__main__":
     mcc_groups = list(mcc_data['mccgrp'].unique())
     mcc_codes = list(mcc_data['mcc'])
 
-    #no deed in prepping data as it is ready
+    #no need in prepping data as it is ready
     # prep_data()
 
     #dataframe is a transaction list
