@@ -193,15 +193,14 @@ if __name__== "__main__":
     mcc_groups = list(mcc_data['mccgrp'].unique())
     mcc_codes = list(mcc_data['mcc'])
 
-    prep_data()
+    # prep_data()
 
     dataframe = read('data-selected.csv')
     dataframe = add_mcc_groups(dataframe, mcc_data)
     save(dataframe, 'data-selected.csv')
-    
+
     status_data = read('status-data.csv')
     
-
     clientid = 1196428
 
     client_info = read('client-info.csv')
