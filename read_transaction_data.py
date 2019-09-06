@@ -123,7 +123,7 @@ def add_client_categories(client_info):
     save(categories_df, 'client-categories.csv')
     return categories_df
 
-# get only one client transactions by filtering the main df
+# get only one client's transactions by filtering the main df
 # total df clean by dropping 'balance' column
 def get_one_client_transactions(dataframe, clientid):
 
