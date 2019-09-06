@@ -1,6 +1,6 @@
 # transactions
 
-There's just one .py file that transforms initial dataset fount on the web.
+There's just one .py file that transforms initial dataset fount on the web. \n
 read_transaction_data.py does the following:
 
 * read and transform raw dataset containing transaction info
