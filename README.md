@@ -10,7 +10,7 @@ read_transaction_data.py does the following:
 * generate a random mcc code for each transaction
 * add a real mcc group corresponding to each transaction's mcc code
 
-##Next steps:
+## Next steps:
 
 * calculate chashback sum based on each transaction's mcc group and client's current cashback categories
 * find out suitable ml algorithm that will give a future category to each client based on received cashback
