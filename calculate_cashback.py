@@ -7,7 +7,7 @@ import random
 
 def get_transactions(filename):
     return rtd.read(filename)
-
+# user can choose clientid from list of all clients
 def get_client_id(clients):
 
     print('clients:')
@@ -17,10 +17,13 @@ def get_client_id(clients):
     print('\nchoose client index [ 0 :',len(clients) - 1,']')
     id = clients[int(input())]
     print('client', id)
-    
+
     return id
 
+# calculate and save cashback amount for each transaction 
+# depending on a list of client's categories and discounts
 def calc_cashback(dataframe):
+
     client_categories = rtd.read('client-categories.csv')
 
     dataframe.cashback = 0
@@ -46,15 +49,19 @@ def calc_cashback(dataframe):
     return dataframe
 
 if __name__== "__main__":
-    # print('hello, world!')
 
+    #get all transactions
     data = rtd.read('data-selected.csv') 
 
     client_list = list(data.clientid.unique())
     clientid = get_client_id(client_list)
 
     dataframe = rtd.get_one_client_transactions(data, clientid)
-    dataframe = calc_cashback(dataframe)
-    summ = dataframe.sum(axis=0, skipna=True).cashback
     
+    # add and fill a column 'cashback'
+    dataframe = calc_cashback(dataframe)
+
+    # total cashback (summ) is not stored anywhere
+    # it is just to perform a result
+    summ = dataframe.sum(axis=0, skipna=True).cashback
     print('total cashback = ', summ)
