@@ -93,8 +93,8 @@ def prep_data():
 
 # no need in it, just a place for playing and testing
 def main():
-
-    client_info = read('client-info.csv')
+    print()
+    # client_info = read('client-info.csv')
 
 #generate a list of cashback categories and discounts for each client depending on their status
 def add_client_categories(client_info):
@@ -135,13 +135,22 @@ def get_one_client_transactions(dataframe, clientid):
 
 def add_mcc_groups(dataframe, mcc_data):
 
-    dataframe['mccgrp'] =''
+    dataframe.mccgrp =''
     for row_index, row in dataframe.iterrows():
 
         mcc_info = mcc_data[mcc_data['mcc'] == row['mcc']].head(1)
-        mcc_info = mcc_info.mccgrp.values
+        mcc_info = str(mcc_info.mccgrp.values)
+
+        mcc_info = mcc_info.replace("[", '')
+        mcc_info = mcc_info.replace("]", '')
+        mcc_info = mcc_info.replace("'", '')
+
         dataframe.at[row_index,'mccgrp'] = mcc_info
 
+
+    # dataframe.mccgrp = dataframe.mccgrp.replace({"'": ''}, regex=True)
+    # dataframe.mccgrp = dataframe.mccgrp.replace({"]": ''}, regex=True)
+    # dataframe.mccgrp = dataframe.mccgrp.replace({"'": ''}, regex=True)
     return dataframe
 
 
@@ -160,14 +169,10 @@ if __name__== "__main__":
     #dataframe is a transaction list
     dataframe = read('data-selected.csv')
     dataframe = add_mcc_groups(dataframe, mcc_data)
-    save(dataframe, 'data-selected.csv')
+    # save(dataframe, 'data-selected.csv')
 
-    status_data = read('status-data.csv')
-    
-    #get a random user
-    clientid = 1196428
+    # status_data = read('status-data.csv')
 
-    client_info = read('client-info.csv')
-    client_categories = read('client-categories.csv')
+    # client_info = read('client-info.csv')
+    # client_categories = read('client-categories.csv')
 
-    one_client_transactions = get_one_client_transactions(dataframe, clientid)
