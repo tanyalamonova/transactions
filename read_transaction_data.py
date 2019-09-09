@@ -169,10 +169,4 @@ if __name__== "__main__":
     #dataframe is a transaction list
     dataframe = read('data-selected.csv')
     dataframe = add_mcc_groups(dataframe, mcc_data)
-    # save(dataframe, 'data-selected.csv')
-
-    # status_data = read('status-data.csv')
-
-    # client_info = read('client-info.csv')
-    # client_categories = read('client-categories.csv')
 
