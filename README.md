@@ -1,6 +1,6 @@
 # Transactions
 
-There's just one .py file that transforms initial dataset found on the web.
+read_transaction_data.py and calculate_cashback.py use pandas.
 
 read_transaction_data.py does the following:
 
@@ -17,7 +17,14 @@ calculate_cashback.py does the following:
 * calculates client's cashback for each purchase based on its mcc group and client's current cashback categories
 * adds and fills 'cashback' column in given dataframe
 
+spark_test.py uses spark and does the following:
+
+* reads preprocessed dataset containing transactions
+* gives user a list of clients to choose from
+* filters dataset by client id
+
 ## Next steps:
 
-* move this algorithm to pyspark
+* calculate client's cashback for each purchase based on its mcc group and client's current cashback categories on spark
+* add and fill 'cashback' column in given dataframe on spark
 * find out suitable ml algorithm that will suggest a future category to each client based on received cashback
