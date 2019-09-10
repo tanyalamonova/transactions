@@ -7,8 +7,6 @@ from pyspark.sql import functions as f
 import os
 import shutil
 
-print(__file__)
-
 # test sparkSession
 # s1 = SparkSession.builder.config("k1", "v1").getOrCreate()
 # flag = s1.conf.get("k1") == s1.sparkContext.getConf().get("k1") == "v1"
@@ -17,6 +15,7 @@ print(__file__)
 def read(filename):
     return spark.read.csv(filename,  inferSchema = True, header = True)
 
+# yet this stuff won't work the way I want it to
 def save(dataframe, filename):
     dataframe.coalesce(1).write.csv(filename, header=True, sep=',')
 
@@ -30,24 +29,43 @@ def save(dataframe, filename):
     # file_with_path = os.path.join(filename, '/*.csv')
     # print('file with path', file_with_path)
     # shutil.move(file_with_path, filename)
+    
+# get list of all clients
+def get_client_list(dataframe):
 
-    os.path.dirname(r'home/developer/transactions')
+    client_list = dataframe.select('clientid').distinct().rdd.map(lambda r: r[0]).collect()
+    return client_list
 
-def add_mcc_groups(dataframe, mcc_data):
-    dataframe.withColumn("mccgrp", dataframe.mcc)
-    return dataframe
+# choose a client who you want to calculate cashback for
+def get_client_id(client_list):
 
-def main():
-    df = spark.read.csv('status-data.csv', inferSchema = True, header = True)
-    df.show()
+    print('\nclients:')
+    [print(client) for client in client_list]
+
+    clientid = input('choose client id: ')
+
+    return clientid
+
+# get transactions made by selected client
+def get_one_client_transactions(dataframe, clientid):
+
+    one_client_transations = dataframe.filter(dataframe.clientid == clientid)
+    return one_client_transations
+
+# still nothing in here
+def calc_cashback(dataframe):
+    print()
 
 if __name__== "__main__":
 
-    spark = SparkSession.builder.master("local").appName("test app").config(conf=SparkConf()).getOrCreate()
+    spark = SparkSession.builder.master("local").appName("calculate cashback").config(conf=SparkConf()).getOrCreate()
     
+    # dataset containing preprocessed transaction info
     filename = 'data-selected.csv'
     dataframe = read(filename)
-    print(dataframe.columns)
 
-    mcc_data = read('mcc-data-transformed.csv')
+    client_list = get_client_list(dataframe)
+    clientid = get_client_id(client_list)
 
+    filtered_data = get_one_client_transactions(dataframe, clientid)
+    filtered_data.show()
