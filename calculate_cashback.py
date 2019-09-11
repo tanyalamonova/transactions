@@ -56,12 +56,13 @@ if __name__== "__main__":
     client_list = list(data.clientid.unique())
     clientid = get_client_id(client_list)
 
-    dataframe = rtd.get_one_client_transactions(data, clientid)
+    # dataframe = rtd.get_one_client_transactions(data, clientid)
     
     # add and fill a column 'cashback'
-    dataframe = calc_cashback(dataframe)
+    dataframe = calc_cashback(data)
+    rtd.save(dataframe, 'test-whole-data-cashback.csv')
 
     # total cashback (summ) is not stored anywhere
     # it is just to perform a result
-    summ = dataframe.sum(axis=0, skipna=True).cashback
-    print('total cashback = ', summ)
+    # summ = dataframe.sum(axis=0, skipna=True).cashback
+    # print('total cashback = ', summ)
