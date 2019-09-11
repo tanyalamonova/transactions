@@ -1,6 +1,6 @@
 # Transactions
 
-read_transaction_data.py and calculate_cashback.py use pandas.
+read_transaction_data.py and calculate_cashback.py use **pandas**.
 
 read_transaction_data.py does the following:
 
@@ -17,7 +17,7 @@ calculate_cashback.py does the following:
 * calculates client's cashback for each purchase based on its mcc group and client's current cashback categories
 * adds and fills 'cashback' column in given dataframe
 
-spark_test.py uses spark and does the following:
+spark_test.py uses **spark** and does the following:
 
 * reads preprocessed dataset containing transactions
 * gives user a list of clients to choose from
