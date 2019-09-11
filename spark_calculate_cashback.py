@@ -54,14 +54,31 @@ def get_one_client_transactions(dataframe, clientid):
 
 # still nothing in here
 def calc_cashback(dataframe):
-    print()
+
+    client_categories = read('client-categories.csv')
+
+    new_dataframe = dataframe.withColumn('cashback', f.lit(1))
+    new_dataframe = new_dataframe.withColumn('cashback', new_dataframe.cashback*new_dataframe.withdamt/100)
+    new_dataframe.show(10)
+    
+
+def test():
+    test_df = read('client-categories.csv')
+    # print('test_df:', test_df)
+
+    # new_df = spark.createDataFrame([[0],[1],[2],[3],[4],[5],[6],[7]], ['new_values'])
+    # new_df.show()
+
+    test_df = test_df.withColumn('numbers', f.lit(1)*test_df.withdamt/100).show()
+    # print('test_df modified:', test_df)
+
 
 if __name__== "__main__":
 
     spark = SparkSession.builder.master("local").appName("calculate cashback").config(conf=SparkConf()).getOrCreate()
-    
+
     # dataset containing preprocessed transaction info
-    filename = 'data-selected.csv'
+    filename = 'test-whole-data-cashback.csv'
     dataframe = read(filename)
 
     client_list = get_client_list(dataframe)
@@ -69,3 +86,4 @@ if __name__== "__main__":
 
     filtered_data = get_one_client_transactions(dataframe, clientid)
     filtered_data.show()
+    # calc_cashback(filtered_data)
