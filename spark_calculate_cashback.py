@@ -3,8 +3,6 @@ from pyspark import SparkContext
 from pyspark import SparkConf
 from pyspark.sql import functions as f
 
-import os
-import shutil
 
 def read(filename):
     return spark.read.csv(filename,  inferSchema = True, header = True)
