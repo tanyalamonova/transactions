@@ -36,14 +36,12 @@ def calc_cashback(dataframe):
         one_client_categories = client_categories[client_categories.clientid == clientid]
 
         if category in one_client_categories.category.values:
-            # print('THEY ARE EQUAL')
             this_cat_info = one_client_categories[one_client_categories.category == category].head(1)
             discount = int(this_cat_info.discount)
         else:
             discount = 1
 
         dataframe.at[row_index, 'cashback'] = row.withdamt * discount / 100
-        # print(dataframe.at[row_index, 'withdamt'], '*', discount, '/ 100 = ', dataframe.at[row_index, 'cashback'])
     
     rtd.save(dataframe, 'one-client-transactions.csv')
     return dataframe
@@ -55,14 +53,7 @@ if __name__== "__main__":
 
     client_list = list(data.clientid.unique())
     clientid = get_client_id(client_list)
-
-    # dataframe = rtd.get_one_client_transactions(data, clientid)
     
     # add and fill a column 'cashback'
     dataframe = calc_cashback(data)
     rtd.save(dataframe, 'test-whole-data-cashback.csv')
-
-    # total cashback (summ) is not stored anywhere
-    # it is just to perform a result
-    # summ = dataframe.sum(axis=0, skipna=True).cashback
-    # print('total cashback = ', summ)
