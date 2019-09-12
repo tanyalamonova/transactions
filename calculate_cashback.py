@@ -21,29 +21,28 @@ def get_client_id(clients):
     return id
 
 # calculate and save cashback amount for each transaction 
-# depending on a list of client's categories and discounts
+# depending on a client's category and discount
 def calc_cashback(dataframe):
 
-    client_categories = rtd.read('client-categories.csv')
-
+    client_info = rtd.read('full-client-info.csv')
     dataframe.cashback = 0
 
     for row_index, row in dataframe.iterrows():
         
         clientid = row.clientid
-        category = row.mccgrp
+        trcategory = row.mccgrp
 
-        one_client_categories = client_categories[client_categories.clientid == clientid]
+        client_cat_info = client_info[client_info.clientid == row.clientid].values[0]
+        client_category = client_cat_info[2]
 
-        if category in one_client_categories.category.values:
-            this_cat_info = one_client_categories[one_client_categories.category == category].head(1)
-            discount = int(this_cat_info.discount)
+        if trcategory == client_category:
+            discount = client_cat_info[3]
         else:
             discount = 1
 
         dataframe.at[row_index, 'cashback'] = row.withdamt * discount / 100
     
-    rtd.save(dataframe, 'one-client-transactions.csv')
+    rtd.save(dataframe, 'test-whole-data-cashback.csv')
     return dataframe
 
 if __name__== "__main__":
@@ -51,9 +50,9 @@ if __name__== "__main__":
     #get all transactions
     data = rtd.read('data-selected.csv') 
 
-    client_list = list(data.clientid.unique())
-    clientid = get_client_id(client_list)
+    # client_list = list(data.clientid.unique())
+    # clientid = get_client_id(client_list)
     
     # add and fill a column 'cashback'
     dataframe = calc_cashback(data)
-    rtd.save(dataframe, 'test-whole-data-cashback.csv')
+    # rtd.save(dataframe, 'test-whole-data-cashback.csv')
