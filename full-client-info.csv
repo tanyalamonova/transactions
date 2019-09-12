@@ -1,7 +1,7 @@
 clientid,status,category,discount
-409000493201,silver,Payment Services,9.0
-409000438611,silver,Unique,11.0
-409000493210,gold,Mail/Telephone/Preauth order,14.0
-409000438620,basic,Unique,18.0
-1196428,gold,Retail Purchase,7.0
-409000362497,basic,Variety/Groc/Food Stores,17.0
+409000493201,silver,Payment Services,20.0
+409000438611,silver,Vehicle Rental,7.0
+409000493210,gold,Vehicle Rental,12.0
+409000438620,basic,  Cash,14.0
+1196428,gold,Financial Institutions,5.0
+409000362497,basic,Jewelry,12.0
