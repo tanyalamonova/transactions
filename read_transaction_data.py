@@ -205,9 +205,6 @@ if __name__== "__main__":
 
     dataframe = cc.calc_cashback(dataframe)
 
-    # dataframe is a transaction list
-    # dataframe = read('test-whole-data-cashback.csv')
-
     full_df = add_client_cat_to_transactions(dataframe)
     save(full_df, 'data-transformed.csv')
     print('full dataset:\n', full_df)
