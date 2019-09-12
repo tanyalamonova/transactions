@@ -4,7 +4,7 @@ from pyspark import SparkConf
 from pyspark.sql import functions as f
 
 
-def read(filename):
+def read(filename, spark=None):
     return spark.read.csv(filename,  inferSchema = True, header = True)
 
 # yet this stuff won't work the way I want it to
