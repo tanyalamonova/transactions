@@ -7,11 +7,6 @@ from pyspark.sql import functions as f
 import os
 import shutil
 
-# test sparkSession
-# s1 = SparkSession.builder.config("k1", "v1").getOrCreate()
-# flag = s1.conf.get("k1") == s1.sparkContext.getConf().get("k1") == "v1"
-# print(flag)
-
 def read(filename):
     return spark.read.csv(filename,  inferSchema = True, header = True)
 
@@ -86,4 +81,3 @@ if __name__== "__main__":
 
     filtered_data = get_one_client_transactions(dataframe, clientid)
     filtered_data.show()
-    # calc_cashback(filtered_data)
