@@ -4,6 +4,8 @@ import string
 import datetime as dt
 import random
 
+import calculate_cashback as cc
+
 def read(filename):
     return pd.read_csv(filename)
 
@@ -18,18 +20,16 @@ def modify_raw_data(dataframe):
 
     # remove unnecessary columns
     dataframe = dataframe.fillna(0)
-    dataframe = dataframe.drop(["TRANSACTION DETAILS","CHQ.NO","VALUE DATE","DEPOSIT AMT","."], axis=1)
-    dataframe.columns = ['clientid','month', 'withdamt', 'balance']
+    dataframe = dataframe.drop(["TRANSACTION DETAILS","CHQ.NO","VALUE DATE","DEPOSIT AMT","BALANCE AMT","."], axis=1)
+    dataframe.columns = ['clientid','month', 'withdamt']
 
     # clean data (remove unnecessary symbols)
     dataframe.clientid = dataframe.clientid.replace({"'": ''}, regex=True)
     dataframe.withdamt = dataframe.withdamt.replace({",": ''}, regex=True)
-    dataframe.balance = dataframe.balance.replace({",": ''}, regex=True)
 
     # change column datatypes
     dataframe.clientid = dataframe.clientid.astype(int)
     dataframe.withdamt = dataframe.withdamt.astype(float)
-    dataframe.balance = dataframe.balance.astype(float)
     dataframe.month = pd.to_datetime(dataframe.month).dt.strftime('%Y-%m')
     return dataframe
 
@@ -96,8 +96,9 @@ def main():
     print()
     # client_info = read('client-info.csv')
 
-def add_single_client_category(client_info):
+def add_single_client_category():
 
+    client_info = read('client-info.csv')
     client_info.category = ''
     client_info.discount = 0
     groups = list(mcc_data.mccgrp.unique()) # got mcc groups shuffled
@@ -111,7 +112,6 @@ def add_single_client_category(client_info):
         client_info.at[row_index, 'discount'] = random.randint(5, 20)
 
     save(client_info, 'full-client-info.csv')
-    return client_info
 
 def add_client_cat_to_transactions(dataframe):
 
@@ -119,21 +119,15 @@ def add_client_cat_to_transactions(dataframe):
     dataframe['clientcat'] = ''
     dataframe['discount'] = 1
 
-    print(dataframe.head(10))
-    print(dataframe.columns)
-
     for row_index, row in dataframe.iterrows():
 
         client_cat_info = client_info[client_info.clientid == row.clientid].values[0]
         category = client_cat_info[2]
         discount = client_cat_info[3]
-        if row_index < 10:
-            print('client_cat_info.category = ', category)
-            print('client_cat_info.discount = ', discount)
+
         dataframe.at[row_index, 'clientcat'] = category
         dataframe.at[row_index, 'discount'] = discount
-    
-    print(dataframe.head(20))
+
     save(dataframe, 'test-whole-dataset.csv')
     return dataframe
 
@@ -202,13 +196,21 @@ if __name__== "__main__":
     # get preprocessed data
 
     mcc_data = read('mcc-data-transformed.csv')
+    mcc_codes = mcc_data.mcc.unique()
+
+    add_single_client_category()
+
+    dataframe = prep_data()
+    dataframe = add_mcc_groups(dataframe, mcc_data)
+
+    dataframe = cc.calc_cashback(dataframe)
 
     # dataframe is a transaction list
-    dataframe = read('test-whole-data-cashback.csv')
+    # dataframe = read('test-whole-data-cashback.csv')
 
     full_df = add_client_cat_to_transactions(dataframe)
     save(full_df, 'data-transformed.csv')
-    # print('full dataset:\n', full_df)
+    print('full dataset:\n', full_df)
 
 
 
