@@ -42,7 +42,6 @@ def calc_cashback(dataframe):
 
         dataframe.at[row_index, 'cashback'] = row.withdamt * discount / 100
     
-    rtd.save(dataframe, 'test-whole-data-cashback.csv')
     return dataframe
 
 if __name__== "__main__":
