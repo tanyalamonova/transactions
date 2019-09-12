@@ -96,6 +96,48 @@ def main():
     print()
     # client_info = read('client-info.csv')
 
+def add_single_client_category(client_info):
+
+    client_info.category = ''
+    client_info.discount = 0
+    groups = list(mcc_data.mccgrp.unique()) # got mcc groups shuffled
+
+    for row_index, row in client_info.iterrows():
+
+        random.shuffle(groups)
+
+        client_id = row.clientid
+        client_info.at[row_index, 'category'] = groups[0]
+        client_info.at[row_index, 'discount'] = random.randint(5, 20)
+
+    save(client_info, 'full-client-info.csv')
+    return client_info
+
+def add_client_cat_to_transactions(dataframe):
+
+    client_info = read('full-client-info.csv')
+    dataframe['clientcat'] = ''
+    dataframe['discount'] = 1
+
+    print(dataframe.head(10))
+    print(dataframe.columns)
+
+    for row_index, row in dataframe.iterrows():
+
+        client_cat_info = client_info[client_info.clientid == row.clientid].values[0]
+        category = client_cat_info[2]
+        discount = client_cat_info[3]
+        if row_index < 10:
+            print('client_cat_info.category = ', category)
+            print('client_cat_info.discount = ', discount)
+        dataframe.at[row_index, 'clientcat'] = category
+        dataframe.at[row_index, 'discount'] = discount
+    
+    print(dataframe.head(20))
+    save(dataframe, 'test-whole-dataset.csv')
+    return dataframe
+
+
 #generate a list of cashback categories and discounts for each client depending on their status
 def add_client_categories(client_info):
 
@@ -160,13 +202,13 @@ if __name__== "__main__":
     # get preprocessed data
 
     mcc_data = read('mcc-data-transformed.csv')
-    mcc_groups = list(mcc_data['mccgrp'].unique())
-    mcc_codes = list(mcc_data['mcc'])
 
-    #no need in prepping data as it is ready
-    # prep_data()
+    # dataframe is a transaction list
+    dataframe = read('test-whole-data-cashback.csv')
 
-    #dataframe is a transaction list
-    dataframe = read('data-selected.csv')
-    dataframe = add_mcc_groups(dataframe, mcc_data)
+    full_df = add_client_cat_to_transactions(dataframe)
+    save(full_df, 'data-transformed.csv')
+    # print('full dataset:\n', full_df)
+
+
 
